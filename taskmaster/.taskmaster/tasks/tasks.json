@@ -2,7 +2,7 @@
   "master": {
     "tasks": [
       {
-        "id": "1",
+        "id": 1,
         "title": "Project Initialization and Database Setup",
         "description": "Initialize the NestJS backend and React frontend repositories, and set up the MySQL database environment.",
         "details": "1. Initialize NestJS project using `nest new backend`. 2. Initialize React project using Vite `npm create vite@latest frontend -- --template react-ts`. 3. Set up a MySQL database (using Docker or local installation). 4. Configure environment variables (.env) for database connection in NestJS. 5. Install TypeORM and MySQL driver in the backend.",
@@ -14,7 +14,7 @@
         "updatedAt": "2025-12-12T11:11:12.430Z"
       },
       {
-        "id": "2",
+        "id": 2,
         "title": "Backend Data Modeling (Entities)",
         "description": "Implement TypeORM entities for Users, Products, Orders, and OrderItems to reflect the database schema.",
         "details": "Create entity files: 1. `User` (id, email, password_hash, role). 2. `Product` (id, name, description, price, stock, category, image_url). 3. `Order` (id, user_id, total_amount, status, created_at). 4. `OrderItem` (id, order_id, product_id, quantity, price_at_purchase). Define relationships: User OneToMany Orders, Order OneToMany OrderItems, Product OneToMany OrderItems.",
@@ -24,10 +24,63 @@
           "1"
         ],
         "status": "pending",
-        "subtasks": []
+        "subtasks": [
+          {
+            "id": 1,
+            "title": "Create User Entity",
+            "description": "Define the User data model with authentication and role fields.",
+            "dependencies": [],
+            "details": "Create `user.entity.ts` using the `@Entity` decorator. Define columns: `id` (PrimaryGeneratedColumn), `email` (Column, unique), `password_hash` (Column), `role` (Column, default 'customer'), and `created_at` (CreateDateColumn). Prepare the `orders` property for a OneToMany relationship.",
+            "status": "pending",
+            "testStrategy": "Check if the class is successfully imported without syntax errors."
+          },
+          {
+            "id": 2,
+            "title": "Create Product Entity",
+            "description": "Define the Product data model representing catalog items.",
+            "dependencies": [],
+            "details": "Create `product.entity.ts`. Define columns: `id`, `name`, `description` (type: text), `price` (type: decimal, precision: 10, scale: 2), `stock` (int), `category`, and `image_url`. Prepare the `orderItems` property for a OneToMany relationship.",
+            "status": "pending",
+            "testStrategy": "Check if the class is successfully imported without syntax errors."
+          },
+          {
+            "id": 3,
+            "title": "Create Order Entity",
+            "description": "Define the Order data model and establish the relationship with Users.",
+            "dependencies": [
+              1
+            ],
+            "details": "Create `order.entity.ts`. Define columns: `id`, `total_amount` (decimal), `status` (enum: pending, completed, cancelled), and `created_at`. Implement the `@ManyToOne(() => User)` decorator to link the order to a specific user via a foreign key.",
+            "status": "pending",
+            "testStrategy": "Verify that the User entity can be referenced within the Order entity file."
+          },
+          {
+            "id": 4,
+            "title": "Create OrderItem Entity",
+            "description": "Define the OrderItem junction entity to link Orders and Products.",
+            "dependencies": [
+              2,
+              3
+            ],
+            "details": "Create `order-item.entity.ts`. Define columns: `id`, `quantity` (int), and `price_at_purchase` (decimal). Implement two `@ManyToOne` relationships: one linking to the `Order` entity and one linking to the `Product` entity.",
+            "status": "pending",
+            "testStrategy": "Verify that both Order and Product entities are correctly referenced."
+          },
+          {
+            "id": 5,
+            "title": "Register Entities and Sync Schema",
+            "description": "Configure the TypeORM module to load the new entities and synchronize the database.",
+            "dependencies": [
+              4
+            ],
+            "details": "Update the root `TypeOrmModule.forRoot` configuration to include User, Product, Order, and OrderItem in the `entities` array. Enable `synchronize: true` (for dev) and start the application to generate the MySQL tables.",
+            "status": "pending",
+            "testStrategy": "Inspect the MySQL database using a client like DBeaver to confirm all 4 tables exist with the correct columns and foreign key constraints."
+          }
+        ]
       },
       {
-        "id": "3",
+        "id": 3,
         "title": "Authentication Module (Backend)",
         "description": "Implement JWT-based authentication with Login and Registration endpoints.",
         "details": "1. Install `@nestjs/passport`, `passport`, `passport-jwt`, `bcrypt`. 2. Create AuthService to handle password hashing (bcrypt) and token generation. 3. Create AuthController with `POST /auth/register` and `POST /auth/login`. 4. Implement JwtStrategy to validate tokens. 5. Create a global AuthGuard (or per-route) to protect endpoints.",
@@ -40,7 +93,7 @@
         "subtasks": []
       },
       {
-        "id": "4",
+        "id": 4,
         "title": "Product Management API (Backend)",
         "description": "Create RESTful endpoints for managing the product catalog.",
         "details": "1. Create ProductModule, Service, and Controller. 2. Implement `GET /products` (Public) with optional query params for filtering. 3. Implement `GET /products/:id` (Public). 4. Implement `POST /products`, `PUT /products/:id`, `DELETE /products/:id` protected by Admin Role Guard. 5. Use DTOs with `class-validator` for input validation.",
@@ -53,7 +106,7 @@
         "subtasks": []
       },
       {
-        "id": "5",
+        "id": 5,
         "title": "Order Processing API (Backend)",
         "description": "Implement order creation logic with transactional integrity to handle stock reduction.",
         "details": "1. Create OrderModule. 2. Implement `POST /orders`. 3. Logic: Wrap in a Transaction. a) Validate stock for all items. b) Create Order record. c) Create OrderItem records. d) Decrement Product stock. e) Commit transaction. 4. If any step fails, rollback. 5. Return created order details.",
@@ -66,7 +119,7 @@
         "subtasks": []
       },
       {
-        "id": "6",
+        "id": 6,
         "title": "Frontend Setup and Authentication UI",
         "description": "Scaffold the React application structure, routing, and authentication forms.",
         "details": "1. Install `react-router-dom`, `axios`, and `tailwindcss`. 2. Configure Axios instance with interceptors to attach JWT from localStorage. 3. Create `AuthProvider` context. 4. Build `Login` and `Register` pages using Tailwind for styling. 5. Implement form submission to backend Auth API.",
@@ -79,7 +132,7 @@
         "subtasks": []
       },
       {
-        "id": "7",
+        "id": 7,
         "title": "Product Catalog and Detail Views (Frontend)",
         "description": "Develop the public-facing product grid and individual product detail pages.",
         "details": "1. Create `ProductList` component fetching data from `GET /products`. 2. Render products in a responsive grid (CSS Grid/Flexbox). 3. Implement Category filter buttons. 4. Create `ProductDetail` page fetching data from `GET /products/:id`. 5. Add 'Add to Cart' button (UI only initially).",
@@ -93,7 +146,7 @@
         "subtasks": []
       },
       {
-        "id": "8",
+        "id": 8,
         "title": "Shopping Cart Implementation (Frontend)",
         "description": "Implement client-side shopping cart logic using React Context.",
         "details": "1. Create `CartContext`. 2. Implement functions: `addToCart(product, qty)`, `removeFromCart(id)`, `updateQuantity(id, qty)`, `clearCart()`. 3. Persist cart state to `localStorage` so it survives refreshes. 4. Create a `CartDrawer` or `CartPage` to display selected items and total price.",
@@ -106,7 +159,7 @@
         "subtasks": []
       },
       {
-        "id": "9",
+        "id": 9,
         "title": "Admin Dashboard (Frontend)",
         "description": "Create a protected admin interface to manage products.",
         "details": "1. Create `AdminRoute` wrapper checking for 'admin' role. 2. Build `ProductTable` component with Edit/Delete buttons. 3. Build `ProductForm` for adding/editing instruments (Name, Price, Stock, Image URL). 4. Connect to backend Admin APIs.",
@@ -120,7 +173,7 @@
         "subtasks": []
       },
       {
-        "id": "10",
+        "id": 10,
         "title": "Checkout Integration and Final Polish",
         "description": "Connect the shopping cart to the Order API and finalize the application.",
         "details": "1. In Cart view, implement 'Place Order' button. 2. On click, construct payload `{ items: [{productId, quantity}] }` and POST to `/orders`. 3. Handle success: Clear Cart Context, show Toast notification, redirect to Home. 4. Handle error: Show Toast with error message. 5. Final CSS polish and responsiveness check.",
@@ -141,7 +194,9 @@
       "completedCount": 1,
       "tags": [
         "master"
-      ]
+      ],
+      "created": "2025-12-12T12:08:40.677Z",
+      "description": "Tasks for master context"
     }
   }
 }

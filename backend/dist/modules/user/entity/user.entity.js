@@ -11,10 +11,16 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = void 0;
 const typeorm_1 = require("typeorm");
+const role_enum_1 = require("./role.enum");
+const order_entity_1 = require("../../order/entity/order.entity");
 let User = class User {
     id;
     email;
-    isActive = true;
+    password_hash;
+    role;
+    created_at;
+    updated_at;
+    orders;
 };
 exports.User = User;
 __decorate([
@@ -27,8 +33,28 @@ __decorate([
 ], User.prototype, "email", void 0);
 __decorate([
     (0, typeorm_1.Column)(),
-    __metadata("design:type", Boolean)
-], User.prototype, "isActive", void 0);
+    __metadata("design:type", String)
+], User.prototype, "password_hash", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: 'enum',
+        enum: role_enum_1.Role,
+        default: role_enum_1.Role.CUSTOMER,
+    }),
+    __metadata("design:type", String)
+], User.prototype, "role", void 0);
+__decorate([
+    (0, typeorm_1.CreateDateColumn)(),
+    __metadata("design:type", Date)
+], User.prototype, "created_at", void 0);
+__decorate([
+    (0, typeorm_1.UpdateDateColumn)(),
+    __metadata("design:type", Date)
+], User.prototype, "updated_at", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => order_entity_1.Order, (order) => order.user),
+    __metadata("design:type", Array)
+], User.prototype, "orders", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);
