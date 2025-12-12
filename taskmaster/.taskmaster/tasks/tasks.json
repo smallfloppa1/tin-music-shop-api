@@ -2,141 +2,146 @@
   "master": {
     "tasks": [
       {
-        "id": 1,
+        "id": "1",
         "title": "Project Initialization and Database Setup",
         "description": "Initialize the NestJS backend and React frontend repositories, and set up the MySQL database environment.",
         "details": "1. Initialize NestJS project using `nest new backend`. 2. Initialize React project using Vite `npm create vite@latest frontend -- --template react-ts`. 3. Set up a MySQL database (using Docker or local installation). 4. Configure environment variables (.env) for database connection in NestJS. 5. Install TypeORM and MySQL driver in the backend.",
         "testStrategy": "Verify NestJS server starts on port 3000. Verify React app starts on port 5173. Confirm successful database connection log in NestJS startup.",
         "priority": "high",
         "dependencies": [],
-        "status": "pending",
-        "subtasks": []
+        "status": "done",
+        "subtasks": [],
+        "updatedAt": "2025-12-12T11:11:12.430Z"
       },
       {
-        "id": 2,
+        "id": "2",
         "title": "Backend Data Modeling (Entities)",
         "description": "Implement TypeORM entities for Users, Products, Orders, and OrderItems to reflect the database schema.",
         "details": "Create entity files: 1. `User` (id, email, password_hash, role). 2. `Product` (id, name, description, price, stock, category, image_url). 3. `Order` (id, user_id, total_amount, status, created_at). 4. `OrderItem` (id, order_id, product_id, quantity, price_at_purchase). Define relationships: User OneToMany Orders, Order OneToMany OrderItems, Product OneToMany OrderItems.",
         "testStrategy": "Run TypeORM migrations or `synchronize: true` (dev only) and verify tables are created in MySQL with correct foreign keys using a DB client like DBeaver.",
         "priority": "high",
         "dependencies": [
-          1
+          "1"
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 3,
+        "id": "3",
         "title": "Authentication Module (Backend)",
         "description": "Implement JWT-based authentication with Login and Registration endpoints.",
         "details": "1. Install `@nestjs/passport`, `passport`, `passport-jwt`, `bcrypt`. 2. Create AuthService to handle password hashing (bcrypt) and token generation. 3. Create AuthController with `POST /auth/register` and `POST /auth/login`. 4. Implement JwtStrategy to validate tokens. 5. Create a global AuthGuard (or per-route) to protect endpoints.",
         "testStrategy": "Use Postman to register a user, then login. Verify a JWT is returned. Attempt to access a protected route without a token and expect 401 Unauthorized.",
         "priority": "high",
         "dependencies": [
-          2
+          "2"
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 4,
+        "id": "4",
         "title": "Product Management API (Backend)",
         "description": "Create RESTful endpoints for managing the product catalog.",
         "details": "1. Create ProductModule, Service, and Controller. 2. Implement `GET /products` (Public) with optional query params for filtering. 3. Implement `GET /products/:id` (Public). 4. Implement `POST /products`, `PUT /products/:id`, `DELETE /products/:id` protected by Admin Role Guard. 5. Use DTOs with `class-validator` for input validation.",
         "testStrategy": "Postman: Create a product as Admin (201). Fetch list as Guest (200). Try to delete as Guest (403). Verify data persistence in MySQL.",
         "priority": "high",
         "dependencies": [
-          3
+          "3"
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 5,
+        "id": "5",
         "title": "Order Processing API (Backend)",
         "description": "Implement order creation logic with transactional integrity to handle stock reduction.",
         "details": "1. Create OrderModule. 2. Implement `POST /orders`. 3. Logic: Wrap in a Transaction. a) Validate stock for all items. b) Create Order record. c) Create OrderItem records. d) Decrement Product stock. e) Commit transaction. 4. If any step fails, rollback. 5. Return created order details.",
         "testStrategy": "Postman: Place order with valid stock (expect 201 and stock decrement). Place order with quantity > stock (expect 400 error). Verify Order and OrderItems tables.",
         "priority": "high",
         "dependencies": [
-          4
+          "4"
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 6,
+        "id": "6",
         "title": "Frontend Setup and Authentication UI",
         "description": "Scaffold the React application structure, routing, and authentication forms.",
         "details": "1. Install `react-router-dom`, `axios`, and `tailwindcss`. 2. Configure Axios instance with interceptors to attach JWT from localStorage. 3. Create `AuthProvider` context. 4. Build `Login` and `Register` pages using Tailwind for styling. 5. Implement form submission to backend Auth API.",
         "testStrategy": "Register a new user via UI. Login and verify JWT is stored in LocalStorage. Verify redirection to home page upon success.",
         "priority": "medium",
         "dependencies": [
-          3
+          "3"
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 7,
+        "id": "7",
         "title": "Product Catalog and Detail Views (Frontend)",
         "description": "Develop the public-facing product grid and individual product detail pages.",
         "details": "1. Create `ProductList` component fetching data from `GET /products`. 2. Render products in a responsive grid (CSS Grid/Flexbox). 3. Implement Category filter buttons. 4. Create `ProductDetail` page fetching data from `GET /products/:id`. 5. Add 'Add to Cart' button (UI only initially).",
         "testStrategy": "Verify product list renders images and prices correctly. Click a product and verify navigation to the detail page. Test category filters.",
         "priority": "medium",
         "dependencies": [
-          4,
-          6
+          "4",
+          "6"
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 8,
+        "id": "8",
         "title": "Shopping Cart Implementation (Frontend)",
         "description": "Implement client-side shopping cart logic using React Context.",
         "details": "1. Create `CartContext`. 2. Implement functions: `addToCart(product, qty)`, `removeFromCart(id)`, `updateQuantity(id, qty)`, `clearCart()`. 3. Persist cart state to `localStorage` so it survives refreshes. 4. Create a `CartDrawer` or `CartPage` to display selected items and total price.",
         "testStrategy": "Add items to cart, refresh page, verify items remain. Change quantity and verify total price calculation. Remove item and verify list update.",
         "priority": "high",
         "dependencies": [
-          7
+          "7"
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 9,
+        "id": "9",
         "title": "Admin Dashboard (Frontend)",
         "description": "Create a protected admin interface to manage products.",
         "details": "1. Create `AdminRoute` wrapper checking for 'admin' role. 2. Build `ProductTable` component with Edit/Delete buttons. 3. Build `ProductForm` for adding/editing instruments (Name, Price, Stock, Image URL). 4. Connect to backend Admin APIs.",
         "testStrategy": "Login as Admin. Add a new product via UI. Verify it appears in the public catalog. Edit the price and verify the update. Delete the product.",
         "priority": "medium",
         "dependencies": [
-          4,
-          6
+          "4",
+          "6"
         ],
         "status": "pending",
         "subtasks": []
       },
       {
-        "id": 10,
+        "id": "10",
         "title": "Checkout Integration and Final Polish",
         "description": "Connect the shopping cart to the Order API and finalize the application.",
         "details": "1. In Cart view, implement 'Place Order' button. 2. On click, construct payload `{ items: [{productId, quantity}] }` and POST to `/orders`. 3. Handle success: Clear Cart Context, show Toast notification, redirect to Home. 4. Handle error: Show Toast with error message. 5. Final CSS polish and responsiveness check.",
         "testStrategy": "Complete a full user flow: Login -> Add to Cart -> Place Order -> Verify 'Order Successful' toast -> Verify Cart is empty -> Verify Stock reduced in DB.",
         "priority": "high",
         "dependencies": [
-          5,
-          8
+          "5",
+          "8"
         ],
         "status": "pending",
         "subtasks": []
       }
     ],
     "metadata": {
-      "created": "2025-12-12T11:00:06.326Z",
-      "updated": "2025-12-12T11:00:06.326Z",
-      "description": "Tasks for master context"
+      "version": "1.0.0",
+      "lastModified": "2025-12-12T11:11:12.435Z",
+      "taskCount": 10,
+      "completedCount": 1,
+      "tags": [
+        "master"
+      ]
     }
   }
 }
