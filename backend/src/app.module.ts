@@ -1,29 +1,37 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './modules/user/entity/user.entity';
 import { UserModule } from './modules/user/user.module';
-import { Order } from './modules/order/entity/order.entity';
-import { Product } from './modules/product/entity/product.entity';
-import { OrderItem } from './modules/order/entity/order-item.entity';
 import { OrderModule } from './modules/order/order.module';
 import { ProductModule } from './modules/product/product.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'appuser',
-      password: 'apppassword',
-      database: 'appdb',
-      entities: [User, Order, Product, OrderItem],
-      synchronize: true,
+    ConfigModule.forRoot({ isGlobal: true }),
+
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'mysql',
+        host: configService.get<string>('DB_HOST'),
+        port: configService.get<number>('DB_PORT'),
+        username: configService.get<string>('DB_USERNAME'),
+        password: configService.get<string>('DB_PASSWORD'),
+        database: configService.get<string>('DB_NAME'),
+        autoLoadEntities: true,
+        // turn off on prod
+        synchronize: false,
+        namingStrategy: new SnakeNamingStrategy(),
+      }),
     }),
 
     UserModule,
     ProductModule,
     OrderModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
