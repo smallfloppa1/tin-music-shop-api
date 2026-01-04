@@ -3,11 +3,13 @@ import {
   CreateDateColumn,
   Entity,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
 import { Role } from './role.enum';
 import { Order } from '../../order/entity/order.entity';
+import { Cart } from '../../cart/entity/cart.entity';
 
 @Entity()
 export class User {
@@ -18,11 +20,11 @@ export class User {
   email: string;
 
   @Column()
-  password_hash: string;
+  passwordHash: string;
 
   // move to customer entity
   @Column()
-  shipping_address: string;
+  shippingAddress: string;
 
   @Column({
     type: 'enum',
@@ -32,11 +34,14 @@ export class User {
   role: Role;
 
   @CreateDateColumn()
-  created_at: Date;
+  createdAt: Date;
 
   @UpdateDateColumn()
-  updated_at: Date;
+  updatedAt: Date;
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
+
+  @OneToOne(() => Cart, (cart) => cart.user)
+  cart: Cart;
 }

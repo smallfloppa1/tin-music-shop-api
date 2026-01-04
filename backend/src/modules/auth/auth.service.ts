@@ -35,7 +35,7 @@ export class AuthService {
 
     const user = this.userRepository.create({
       email: registerDto.email,
-      password_hash: hashedPassword,
+      passwordHash: hashedPassword,
       role: Role.CUSTOMER,
     });
     await this.userRepository.save(user);
@@ -63,7 +63,7 @@ export class AuthService {
 
     const isPasswordMatch = await bcrypt.compare(
       loginDto.password,
-      user.password_hash,
+      user.passwordHash,
     );
 
     if (!isPasswordMatch) {

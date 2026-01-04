@@ -1,5 +1,13 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  JoinColumn,
+} from 'typeorm';
 import { OrderItem } from '../../order/entity/order-item.entity';
+import { ProductCategory } from './product-category.entity';
 
 @Entity()
 export class Product {
@@ -23,11 +31,19 @@ export class Product {
   stock: number;
 
   @Column()
-  category: string;
+  imageUrl: string;
 
-  @Column()
-  image_url: string;
+  @Column({ nullable: true })
+  categoryId: number;
+
+  @ManyToOne(
+    () => ProductCategory,
+    (productCategory) => productCategory.products,
+    { onDelete: 'SET NULL', nullable: true },
+  )
+  @JoinColumn({ name: 'category_id' })
+  category: ProductCategory;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
-  order_items: OrderItem[];
+  orderItems: OrderItem[];
 }

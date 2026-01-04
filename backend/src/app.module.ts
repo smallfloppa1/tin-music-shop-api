@@ -4,6 +4,8 @@ import { UserModule } from './modules/user/user.module';
 import { OrderModule } from './modules/order/order.module';
 import { ProductModule } from './modules/product/product.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CartModule } from './modules/cart/cart.module';
+import { PaymentModule } from './modules/payment/payment.module';
 import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -32,6 +34,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ProductModule,
     OrderModule,
     AuthModule,
+    CartModule,
+    PaymentModule,
   ],
 })
 export class AppModule {}

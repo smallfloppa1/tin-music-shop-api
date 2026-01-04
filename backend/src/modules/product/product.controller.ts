@@ -7,7 +7,7 @@ export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
   @Get(':id')
-  getById(@Param('id') id: number): Promise<Product> {
+  getById(@Param('id') id: number): Promise<Awaited<undefined>> {
     return this.productService.getById(id);
   }
 }

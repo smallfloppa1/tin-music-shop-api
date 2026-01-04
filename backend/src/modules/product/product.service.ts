@@ -9,4 +9,10 @@ export class ProductService {
     @InjectRepository(Product)
     private productRepository: Repository<Product>,
   ) {}
+  d;
+
+  getById(id: number) {
+    console.log(id);
+    return Promise.resolve(undefined);
+  }
 }
