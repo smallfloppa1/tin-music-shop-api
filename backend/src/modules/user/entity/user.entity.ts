@@ -20,10 +20,16 @@ export class User {
   email: string;
 
   @Column()
+  firstName: string;
+
+  @Column()
+  lastName: string;
+
+  @Column()
   passwordHash: string;
 
   // move to customer entity
-  @Column()
+  @Column({ nullable: true })
   shippingAddress: string;
 
   @Column({

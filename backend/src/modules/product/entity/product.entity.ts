@@ -7,7 +7,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 import { OrderItem } from '../../order/entity/order-item.entity';
-import { ProductCategory } from './product-category.entity';
+import { ProductCategory } from '../../product-category/entity/product-category.entity';
 
 @Entity()
 export class Product {
@@ -30,11 +30,11 @@ export class Product {
   @Column()
   stock: number;
 
-  @Column()
-  imageUrl: string;
+  @Column({ nullable: true })
+  imageUrl?: string;
 
   @Column({ nullable: true })
-  categoryId: number;
+  categoryId?: number;
 
   @ManyToOne(
     () => ProductCategory,
