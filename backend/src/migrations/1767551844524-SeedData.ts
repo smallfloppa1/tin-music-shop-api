@@ -6,9 +6,9 @@ export class SeedData1767551844524 implements MigrationInterface {
       const passwordHash = '$2a$12$F4a/aiAtzPfyf5z8PUDTzOBPVSSEYsmi.u6MSVZz.mfpudYvLWD4i';
 
       await queryRunner.query(`
-            INSERT INTO \`user\` (id, email, first_name, last_name, password_hash, role, shipping_address) VALUES
+            INSERT INTO \`user\` (id, email, first_name, last_name, password, role, shipping_address) VALUES
             (1, 'admin@musicshop.com', 'Admin', 'User', '${passwordHash}', 'ADMIN', 'Headquarters, Music St.'),
-            (2, 'customer@gmail.com', 'John', 'Doe', '${passwordHash}', 'CUSTOMER', '123 Guitar Lane, Rock City');
+            (2, 'customer@gmail.com', 'John', 'Doe', '${passwordHash}', 'USER', '123 Guitar Lane, Rock City');
         `);
 
       await queryRunner.query(`
