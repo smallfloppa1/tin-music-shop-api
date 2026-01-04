@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   HttpCode,
   HttpStatus,
   Param,
@@ -31,6 +32,11 @@ export class ProductCategoryController {
     @Body() category: CreateCategoryDto,
   ): Promise<ProductCategoryDto> {
     return this.productCategoryService.createCategory(category);
+  }
+
+  @Get()
+  async getAllCategories(): Promise<ProductCategoryDto[]> {
+    return this.productCategoryService.getAllCategories();
   }
 
   @Patch(':id')

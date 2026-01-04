@@ -44,7 +44,7 @@ export class ProductService {
     const products = await this.productRepository.find({
       where: {
         category: {
-          name: category,
+          slug: category,
         },
       },
       relations: ['category'],

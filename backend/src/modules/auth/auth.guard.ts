@@ -26,7 +26,6 @@ export class AuthGuard implements CanActivate {
       request['user'] = await this.jwtService.verifyAsync<UserPayload>(token);
     } catch (error) {
       const err = error as Error;
-      console.error('Auth error:', err.message);
       throw new UnauthorizedException('Session expired! Please sign in again');
     }
 

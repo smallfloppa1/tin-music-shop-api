@@ -45,8 +45,6 @@ export class OrderService {
 
     await this.cartService.clearCart(userId);
 
-    // Reload to get relations if needed, though create usually returns what we need
-    // But for consistency with DTO mapping which might expect relations
     const reloadedOrder = await this.orderRepository.findOne({
       where: { id: savedOrder.id },
       relations: ['items', 'items.product'],

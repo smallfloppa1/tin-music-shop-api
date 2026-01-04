@@ -51,6 +51,13 @@ export class ProductCategoryService {
     return ProductCategoryDto.fromEntity(savedCategory);
   }
 
+  async getAllCategories(): Promise<ProductCategoryDto[]> {
+    const categories = await this.productCategoryRepository.find();
+    return categories.map((category) =>
+      ProductCategoryDto.fromEntity(category),
+    );
+  }
+
   async updateCategory(
     id: number,
     category: UpdateCategoryDto,

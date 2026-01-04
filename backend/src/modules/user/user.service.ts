@@ -8,7 +8,6 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UserDto } from './dto/user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
@@ -46,10 +45,6 @@ export class UserService {
       if (emailExists) {
         throw new ConflictException('User with this email already exists');
       }
-    }
-
-    if (user.password) {
-      user.password = await bcrypt.hash(user.password, 10);
     }
 
     const updatedUser = this.userRepository.merge(existingUser, user);

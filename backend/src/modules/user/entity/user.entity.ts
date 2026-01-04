@@ -26,18 +26,14 @@ export class User {
   lastName: string;
 
   @Column()
-  passwordHash: string;
-
-  // move to customer entity
-  @Column({ nullable: true })
-  shippingAddress: string;
+  password: string;
 
   @Column({
     type: 'enum',
     enum: Role,
-    default: Role.CUSTOMER,
+    default: Role.USER,
   })
-  role: Role;
+  role: string;
 
   @CreateDateColumn()
   createdAt: Date;

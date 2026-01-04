@@ -35,17 +35,14 @@ export class AuthService {
 
     const user = this.userRepository.create({
       email: registerDto.email,
-      passwordHash: hashedPassword,
-      role: Role.CUSTOMER,
+      firstName: registerDto.firstName,
+      lastName: registerDto.lastName,
+      password: hashedPassword,
+      role: Role.USER,
     });
     await this.userRepository.save(user);
 
-    const payload = {
-      sub: user.id,
-      email: user.email,
-    };
-
-    const jwt = await this.jwtService.signAsync(payload);
+    const jwt = await this.generateJwt(user.id, user.email, user.role);
 
     return {
       accessToken: jwt,
@@ -63,24 +60,29 @@ export class AuthService {
 
     const isPasswordMatch = await bcrypt.compare(
       loginDto.password,
-      user.passwordHash,
+      user.password,
     );
 
     if (!isPasswordMatch) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    const jwt = await this.generateJwt(user.id, user.email);
+    const jwt = await this.generateJwt(user.id, user.email, user.role);
 
     return {
       accessToken: jwt,
     };
   }
 
-  private async generateJwt(id: number, email: string): Promise<string> {
+  private async generateJwt(
+    id: number,
+    email: string,
+    role: string,
+  ): Promise<string> {
     const payload = {
       sub: id,
       email: email,
+      role: role,
     };
 
     return this.jwtService.signAsync(payload);
