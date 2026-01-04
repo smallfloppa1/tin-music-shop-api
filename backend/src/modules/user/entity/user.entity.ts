@@ -20,6 +20,10 @@ export class User {
   @Column()
   password_hash: string;
 
+  // move to customer entity
+  @Column()
+  shipping_address: string;
+
   @Column({
     type: 'enum',
     enum: Role,
